@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Águas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-bottom: 40px;
+            text-align: center;
+            color: #333;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* from your parameter */
+            gap: 20px;
+            justify-items: center;
+            justify-content: center;
+            max-width: 680px; /* 3 * 160px-ish button space */
+            margin: 0 auto;
+         }    
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button {
+            width: 100px;
+            height: 100px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .button img {
+            width: 50px;
+            height: 50px;
+        }
+          .button:hover {
+            filter: brightness(80%);
+          }
+          .button:active {
+            filter: brightness(80%);
+          }
+          
+          
+        .label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Águas</h1>
+    <div class="button-container">
+    
+        <!-- BUTTON 1 -->
+        
+        <div class="button-wrapper">
+            <a href="ww" class="button" style="background-color: #DBFFBD;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://safe-scenarios.s3.us-west-2.amazonaws.com/AR/icons/Attributes.png" alt="Attributes">
+            </a>
+            <div class="label">Attributes</div>
+        </div>
+
+        <!-- BUTTON 2 -->
+        
+        <div class="button-wrapper">
+            <a href="ss" class="button" style="background-color: #55FFFF;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://safe-scenarios.s3.us-west-2.amazonaws.com/images/notes.png" alt="Logica">
+            </a>
+            <div class="label">Logica</div>
+        </div>
+
+        <!-- BUTTON 3 -->
+
+        <div class="button-wrapper">
+            <a href="sss" class="button" style="background-color: #AA55FF;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/artificial-intelligence.png" alt="3D">
+            </a>
+            <div class="label">3D</div>
+        </div>
+    
+    
+
+    </div>
+
+    
+
+</body>
+</html>
+
+
