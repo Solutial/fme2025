@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+   <head>
+      <title>Report</title>
+      <meta charset="UTF-8">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   </head>
+   <body>
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comparativo de Tampas – Solutial</title>
+  <style>
+    :root{--bg:#f7f7f8;--fg:#111;--muted:#6b7280;--line:#e5e7eb;--brand:#0ea5e9}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:10}
+    .brand{height:36px;object-fit:contain}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .help{color:var(--muted);font-size:13px;margin:4px 0 16px}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+    .head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .title{font-weight:600}
+    .pill{font-size:12px;color:#fff;background:#111317;border:1px solid #0f1115;padding:3px 8px;border-radius:999px}
+
+    figure{margin:0}
+    .imgbox{position:relative;background:#0f1115}
+    .imgbox img{width:100%;height:auto;display:block}
+    .caption{padding:10px 14px;border-top:1px solid var(--line);color:var(--muted)}
+
+    .actions{display:flex;gap:8px;align-items:center;padding:10px 14px}
+    .btn{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn:hover{background:#f3f4f6}
+
+    dialog#lightbox{border:none;border-radius:12px;padding:0;max-width:90vw;max-height:90vh}
+    dialog#lightbox::backdrop{background:rgba(0,0,0,.5)}
+    .lightwrap{position:relative}
+    .lightwrap img{display:block;max-width:90vw;max-height:90vh;object-fit:contain}
+    .close{position:absolute;top:8px;right:8px;border:none;background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <img class="brand" src="https://solutial.github.io/fme2025/Logo3%20-%20Solutial.png" alt="Solutial"/>
+    <div>
+      <button class="btn" onclick="window.print()">Imprimir</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <p class="help">Comparativo visual de dois tipos comuns de tampas em vias urbanas. Clique nas imagens para ampliar.</p>
+    <div class="grid">
+      <!-- Cartão 1: Grade pluvial / boca de lobo -->
+      <article class="card">
+        <div class="head"><div class="title">Grade pluvial (boca de lobo)</div><span class="pill">Drenagem</span></div>
+        <figure>
+          <div class="imgbox">
+            <img id="img1" alt="Grade pluvial retangular" src="https://solutial.github.io/fme2025/catchbasin.jpg" loading="lazy" decoding="async" width="922" height="553" sizes="(max-width: 900px) 100vw, 50vw" />
+          </div>
+          <figcaption class="caption">Usada para captar águas de chuva na sarjeta; normalmente classe C250 ou D400 em vias com tráfego.</figcaption>
+        </figure>
+        <div class="actions">
+          <button class="btn" onclick="downloadImg('img1','grade_pluvial.jpg')">Baixar</button>
+        </div>
+      </article>
+
+      <!-- Cartão 2: Tampa circular de poço de visita -->
+      <article class="card">
+        <div class="head"><div class="title">Tampa de poço de visita</div><span class="pill">Esgoto/Água</span></div>
+        <figure>
+          <div class="imgbox">
+            <img id="img2" alt="Tampa circular de poço de visita" src="https://solutial.github.io/fme2025/manholecover2.jpg" loading="lazy" decoding="async" width="775" height="775" sizes="(max-width: 900px) 100vw, 50vw" />
+          </div>
+          <figcaption class="caption">Acesso para inspeção/manutenção de redes; diâmetros típicos 600–800 mm; classes de carga D400–F900 conforme local.</figcaption>
+        </figure>
+        <div class="actions">
+          <button class="btn" onclick="downloadImg('img2','tampa_poco_visita.jpg')">Baixar</button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <dialog id="lightbox"><div class="lightwrap"><button class="close" onclick="lb.close()">Fechar ✕</button><img id="lbimg" alt="Visualização ampliada"></div></dialog>
+
+  <script>
+    const lb = document.getElementById('lightbox');
+    const lbimg = document.getElementById('lbimg');
+    function bindZoom(id){
+      const el = document.getElementById(id);
+      el.addEventListener('click', ()=>{ lbimg.src = el.src; lb.showModal(); });
+    }
+    bindZoom('img1'); bindZoom('img2');
+
+    function downloadImg(id, filename){
+      const link = document.createElement('a');
+      link.href = document.getElementById(id).src; link.download = filename; link.click();
+    }
+  </script>
+</body>
+</html>
+
+   </body>
+</html>
+
