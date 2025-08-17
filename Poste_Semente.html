@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poste Elétrico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-bottom: 40px;
+            text-align: center;
+            color: #333;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* from your parameter */
+            gap: 20px;
+            justify-items: center;
+            justify-content: center;
+            max-width: 680px; /* 3 * 160px-ish button space */
+            margin: 0 auto;
+         }    
+        .button-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button {
+            width: 100px;
+            height: 100px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .button img {
+            width: 50px;
+            height: 50px;
+        }
+          .button:hover {
+            filter: brightness(80%);
+          }
+          .button:active {
+            filter: brightness(80%);
+          }
+          
+          
+        .label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Poste Elétrico</h1>
+    <div class="button-container">
+    
+        <!-- BUTTON 1 -->
+        
+        <div class="button-wrapper">
+            <a href="https://solutial.github.io/fme2025/Poste_Atributos.html" class="button" style="background-color: #FFFFFF;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://safe-scenarios.s3.us-west-2.amazonaws.com/AR/icons/Attributes.png" alt="Atributos">
+            </a>
+            <div class="label">Atributos</div>
+        </div>
+
+        <!-- BUTTON 2 -->
+        
+        <div class="button-wrapper">
+            <a href="https://www.youtube.com/watch?v=djV9Hkk7DFU" class="button" style="background-color: #FFFFFF;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://img.icons8.com/?size=100&id=19318&format=png&color=000000" alt="Webinar">
+            </a>
+            <div class="label">Webinar</div>
+        </div>
+
+        <!-- BUTTON 3 -->
+
+        <div class="button-wrapper">
+            <a href="https://solutial.github.io/fme2025/Poste_Equipamentos.html" class="button" style="background-color: #FFFFFF;" onclick="sound_vibrate(event, this.href);">
+                <img src="https://img.icons8.com/?size=100&id=S3s9hSTbqAwN&format=png&color=000000" alt="Equipamentos">
+            </a>
+            <div class="label">Equipamentos</div>
+        </div>
+    
+    
+
+    </div>
+
+    
+
+</body>
+</html>
+
+
