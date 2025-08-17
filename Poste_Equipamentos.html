@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html>
+   <head>
+      <title>Report</title>
+      <meta charset="UTF-8">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   </head>
+   <body>
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poste Elétrico – 5 Componentes</title>
+  <style>
+    :root{--bg:#f7f7f8;--fg:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#0ea5e9;--accent:#22c55e;--danger:#ef4444}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:10}
+    .brand{height:32px;object-fit:contain}
+    .btn{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn:hover{background:#f3f4f6}
+
+    .wrap{max-width:1200px;margin:0 auto;padding:16px;display:grid;grid-template-columns:320px 1fr;gap:16px}
+    @media (max-width:960px){.wrap{grid-template-columns:1fr}}
+
+    .panel{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .panel .head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .panel .body{padding:12px 14px}
+    .muted{color:var(--muted)}
+
+    .list{display:flex;flex-direction:column;gap:8px}
+    .item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px}
+    .item input{margin-top:2px}
+    .badge{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:#0f172a;background:#f8fafc}
+
+    /* Área de desenho */
+    .stage{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:420px}
+    svg{display:block;width:100%;height:auto}
+
+    /* Pinos/etiquetas */
+    .pin{position:absolute;translate:-50% -50%;display:flex;align-items:center;gap:6px;cursor:pointer}
+    .pin .dot{width:12px;height:12px;border:2px solid #fff;border-radius:999px;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
+    .pin[data-active="true"] .dot{background:var(--accent)}
+    .pin[data-active="false"] .dot{background:#94a3b8}
+    .pin .label{background:#0f1115;color:#fff;font-size:12px;padding:4px 8px;border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+
+    .legend{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--line)}
+    .legend .pill{font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
+
+    @media print{header,.panel{display:none} .stage{border:0}}
+  </style>
+</head>
+<body>
+  <header>
+    <img class="brand" src="https://solutial.github.io/fme2025/Logo3%20-%20Solutial.png" alt="Solutial"/>
+    <button class="btn" onclick="window.print()">Imprimir</button>
+  </header>
+
+  <div class="wrap">
+    <!-- Painel de componentes -->
+    <aside class="panel">
+      <div class="head"><strong>Componentes do Poste (5)</strong><span class="badge">toggle para mostrar/ocultar</span></div>
+      <div class="body">
+        <div class="list" id="list"></div>
+        <p class="muted" style="margin-top:10px">Dica: clique no marcador no desenho para destacar o componente.</p>
+      </div>
+    </aside>
+
+    <!-- Desenho do poste (SVG) -->
+    <section class="panel">
+      <div class="head"><strong>Poste – Visão esquemática</strong></div>
+      <div class="stage" id="stage">
+        <svg viewBox="0 0 800 600" aria-label="Esquema de poste">
+          <!-- Céu suave -->
+          <defs>
+            <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#eaf2ff"/>
+              <stop offset="100%" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="800" height="600" fill="url(#sky)"/>
+
+          <!-- Poste -->
+          <g id="poste">
+            <rect x="380" y="100" width="40" height="440" rx="12" fill="#9aa4ae" stroke="#6b7280"/>
+            <!-- Base -->
+            <rect x="370" y="540" width="60" height="20" rx="4" fill="#6b7280" opacity=".5"/>
+          </g>
+
+          <!-- Cruzeta -->
+          <g id="cruzeta">
+            <rect x="250" y="160" width="320" height="16" rx="6" fill="#8b949e" stroke="#6b7280"/>
+            <!-- Isoladores (3) -->
+            <g id="isoladores">
+              <circle cx="290" cy="168" r="10" fill="#b91c1c" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="410" cy="168" r="10" fill="#b91c1c" stroke="#ffffff" stroke-width="2"/>
+              <circle cx="530" cy="168" r="10" fill="#b91c1c" stroke="#ffffff" stroke-width="2"/>
+            </g>
+          </g>
+
+          <!-- Transformador de distribuição (cilindro) -->
+          <g id="transformador">
+            <ellipse cx="465" cy="240" rx="38" ry="18" fill="#94a3b8" stroke="#6b7280"/>
+            <rect x="427" y="240" width="76" height="92" rx="10" fill="#cbd5e1" stroke="#6b7280"/>
+            <ellipse cx="465" cy="332" rx="38" ry="18" fill="#94a3b8" stroke="#6b7280"/>
+            <!-- Buchas -->
+            <circle cx="445" cy="222" r="5" fill="#0f172a"/>
+            <circle cx="465" cy="218" r="5" fill="#0f172a"/>
+            <circle cx="485" cy="222" r="5" fill="#0f172a"/>
+          </g>
+
+          <!-- Chave fusível (cutout) -->
+          <g id="fusivel">
+            <rect x="580" y="150" width="8" height="70" rx="3" fill="#6b7280"/>
+            <rect x="588" y="155" width="6" height="60" rx="3" fill="#f59e0b"/>
+          </g>
+
+          <!-- Braço e luminária -->
+          <g id="iluminacao">
+            <path d="M 400 210 C 460 210, 510 230, 560 250" fill="none" stroke="#6b7280" stroke-width="6"/>
+            <ellipse cx="575" cy="255" rx="28" ry="14" fill="#94a3b8" stroke="#6b7280"/>
+            <ellipse cx="575" cy="258" rx="10" ry="6" fill="#fef08a"/>
+          </g>
+
+          <!-- Estaios/âncora -->
+          <g id="estaios">
+            <line x1="390" y1="360" x2="260" y2="520" stroke="#6b7280" stroke-width="4"/>
+            <line x1="410" y1="360" x2="540" y2="520" stroke="#6b7280" stroke-width="4"/>
+            <circle cx="260" cy="520" r="10" fill="#6b7280"/>
+            <circle cx="540" cy="520" r="10" fill="#6b7280"/>
+          </g>
+
+        </svg>
+
+        <!-- Pinos posicionados em % relativos à .stage -->
+        <div class="pin" data-id="transformador" style="left:58.5%; top:46%">
+          <span class="dot"></span><span class="label">Transformador</span>
+        </div>
+        <div class="pin" data-id="fusivel" style="left:74%; top:31%">
+          <span class="dot"></span><span class="label">Chave fusível</span>
+        </div>
+        <div class="pin" data-id="isoladores" style="left:51.5%; top:29%">
+          <span class="dot"></span><span class="label">Isoladores</span>
+        </div>
+        <div class="pin" data-id="iluminacao" style="left:72%; top:44%">
+          <span class="dot"></span><span class="label">Braço + luminária</span>
+        </div>
+        <div class="pin" data-id="estaios" style="left:33%; top:74%">
+          <span class="dot"></span><span class="label">Estaios/âncora</span>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </section>
+  </div>
+
+  <script>
+    // Dados dos 5 componentes
+    const COMPONENTES = [
+      { id:'transformador', nome:'Transformador de distribuição', desc:'Reduz a tensão da rede para fornecimento local. Verificar vazamentos, buchas e fixações.' },
+      { id:'fusivel',       nome:'Chave fusível / cutout',        desc:'Protege o circuito contra sobrecorrente e permite seccionamento em manobra.' },
+      { id:'isoladores',    nome:'Isoladores',                    desc:'Suporte e isolamento dos condutores na cruzeta. Observar trincas e contaminação.' },
+      { id:'iluminacao',    nome:'Braço e luminária (IP)',        desc:'Conjunto de iluminação pública. Checar braço, luminária e fotocélula.' },
+      { id:'estaios',       nome:'Estaios e âncora',              desc:'Estabilidade do poste. Verificar tensão, corrosão e ancoragem ao solo.' }
+    ];
+
+    const stage = document.getElementById('stage');
+    const list = document.getElementById('list');
+    const legend = document.getElementById('legend');
+
+    // Inicializa lista com checkboxes e legendas
+    COMPONENTES.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = `
+        <input type="checkbox" id="chk-${c.id}" checked aria-label="Mostrar ${c.nome}"/>
+        <div>
+          <label for="chk-${c.id}"><strong>${c.nome}</strong></label>
+          <div class="muted">${c.desc}</div>
+        </div>`;
+      list.appendChild(row);
+
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = c.nome;
+      pill.style.cursor = 'pointer';
+      pill.addEventListener('click', () => highlight(c.id));
+      legend.appendChild(pill);
+    });
+
+    // Estado inicial: todos ativos
+    document.querySelectorAll('.pin').forEach(pin=> pin.dataset.active = 'true');
+
+    // Bind de visibilidade
+    COMPONENTES.forEach(c => {
+      const chk = document.getElementById(`chk-${c.id}`);
+      chk.addEventListener('change', () => setVisible(c.id, chk.checked));
+    });
+
+    function setVisible(id, on){
+      // Toggle no SVG (grupo com mesmo id)
+      const g = stage.querySelector('svg #' + id);
+      if(g) g.style.display = on ? '' : 'none';
+      // Toggle no pin correspondente
+      const pin = stage.querySelector(`.pin[data-id="${id}"]`);
+      if(pin) pin.dataset.active = on ? 'true' : 'false';
+    }
+
+    function highlight(id){
+      // Destaca brevemente o grupo/pin
+      const g = stage.querySelector('svg #' + id);
+      const pin = stage.querySelector(`.pin[data-id="${id}"] .label`);
+      if(!g || !pin) return;
+      const old = g.style.filter;
+      g.style.filter = 'drop-shadow(0 0 8px rgba(34,197,94,.8))';
+      pin.style.outline = '2px solid var(--accent)';
+      setTimeout(()=>{ g.style.filter = old || ''; pin.style.outline = 'none'; }, 900);
+      // Garante visibilidade
+      const chk = document.getElementById('chk-' + id);
+      if(chk && !chk.checked){ chk.checked = true; setVisible(id, true); }
+    }
+
+    // Clique nos pinos
+    stage.querySelectorAll('.pin').forEach(pin => {
+      pin.addEventListener('click', () => highlight(pin.dataset.id));
+    });
+  </script>
+</body>
+</html>
+   </body>
+</html>
+
