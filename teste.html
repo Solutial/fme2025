@@ -1,0 +1,627 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Diagnóstico IA | Escavadeira EX01</title>
+
+    <style>
+        :root {
+            --background: #111820;
+            --panel: #1b2530;
+            --panel-light: #24313d;
+            --border: #344452;
+            --text: #f4f7f9;
+            --muted: #aab7c2;
+            --warning: #ffb020;
+            --danger: #ff5252;
+            --success: #34c759;
+            --info: #39a9ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top right, #263747 0%, transparent 35%),
+                var(--background);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 24px;
+            margin-bottom: 20px;
+
+            background: linear-gradient(135deg, #202c37, #18212a);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .equipment-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .equipment-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 64px;
+            height: 64px;
+
+            font-size: 32px;
+            background: rgba(255, 176, 32, 0.12);
+            border: 1px solid rgba(255, 176, 32, 0.4);
+            border-radius: 14px;
+        }
+
+        h1 {
+            margin-bottom: 6px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .date-time {
+            text-align: right;
+        }
+
+        .date-time-label {
+            margin-bottom: 5px;
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #currentDateTime {
+            color: var(--info);
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .status-panel {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            padding: 22px;
+            margin-bottom: 20px;
+
+            background: linear-gradient(
+                90deg,
+                rgba(255, 176, 32, 0.16),
+                rgba(255, 176, 32, 0.05)
+            );
+
+            border: 1px solid rgba(255, 176, 32, 0.55);
+            border-left: 6px solid var(--warning);
+            border-radius: 14px;
+        }
+
+        .status-icon {
+            font-size: 42px;
+        }
+
+        .status-title {
+            color: var(--warning);
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .status-description {
+            margin-top: 5px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+
+            padding: 20px;
+
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .metric-card.alert {
+            border-color: rgba(255, 82, 82, 0.65);
+        }
+
+        .metric-card::after {
+            position: absolute;
+            right: -25px;
+            bottom: -25px;
+
+            width: 80px;
+            height: 80px;
+
+            content: "";
+            background: rgba(255, 255, 255, 0.025);
+            border-radius: 50%;
+        }
+
+        .metric-label {
+            margin-bottom: 10px;
+            color: var(--muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .metric-value {
+            margin-bottom: 7px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .metric-value.danger {
+            color: var(--danger);
+        }
+
+        .metric-value.warning {
+            color: var(--warning);
+        }
+
+        .metric-value.success {
+            color: var(--success);
+        }
+
+        .metric-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .progress {
+            width: 100%;
+            height: 7px;
+            margin-top: 14px;
+
+            overflow: hidden;
+            background: #0f151b;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .progress-temperature {
+            width: 96%;
+            background: var(--danger);
+        }
+
+        .progress-fuel {
+            width: 40%;
+            background: var(--warning);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            padding: 24px;
+
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+
+            font-size: 19px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .analysis-item {
+            padding: 15px;
+            margin-bottom: 12px;
+
+            background: var(--panel-light);
+            border-left: 4px solid var(--info);
+            border-radius: 8px;
+        }
+
+        .analysis-item.alert {
+            border-left-color: var(--danger);
+        }
+
+        .analysis-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .analysis-item.success {
+            border-left-color: var(--success);
+        }
+
+        .analysis-item strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .analysis-item p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .recommendation {
+            display: flex;
+            gap: 14px;
+
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .recommendation:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .recommendation-number {
+            display: flex;
+            flex: 0 0 32px;
+            align-items: center;
+            justify-content: center;
+
+            width: 32px;
+            height: 32px;
+
+            color: #151515;
+            font-weight: bold;
+            background: var(--warning);
+            border-radius: 50%;
+        }
+
+        .recommendation-content strong {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .recommendation-content p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .ai-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 16px 20px;
+            margin-top: 20px;
+
+            color: var(--muted);
+            font-size: 13px;
+            background: rgba(57, 169, 255, 0.06);
+            border: 1px solid rgba(57, 169, 255, 0.25);
+            border-radius: 12px;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(52, 199, 89, 0.5);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.55);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 199, 89, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .date-time {
+                width: 100%;
+                text-align: left;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <header class="header">
+            <div class="equipment-title">
+                <div class="equipment-icon">🏗️</div>
+
+                <div>
+                    <h1>Escavadeira EX01</h1>
+                    <p class="subtitle">
+                        Diagnóstico operacional gerado por Inteligência Artificial
+                    </p>
+                </div>
+            </div>
+
+            <div class="date-time">
+                <div class="date-time-label">Data da análise</div>
+                <div id="currentDateTime">Carregando...</div>
+            </div>
+        </header>
+
+        <section class="status-panel">
+            <div class="status-icon">⚠️</div>
+
+            <div>
+                <div class="status-title">
+                    ALERTA — Atenção Requerida
+                </div>
+
+                <p class="status-description">
+                    A temperatura do motor está acima da faixa ideal de trabalho.
+                    O equipamento deve permanecer sob monitoramento operacional.
+                </p>
+            </div>
+        </section>
+
+        <section class="metrics-grid">
+
+            <article class="metric-card alert">
+                <div class="metric-label">Temperatura do motor</div>
+                <div class="metric-value danger">96°C</div>
+
+                <div class="metric-description">
+                    Faixa ideal: 80°C a 90°C
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar progress-temperature"></div>
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-label">Horímetro</div>
+                <div class="metric-value warning">8.420h</div>
+
+                <div class="metric-description">
+                    Equipamento com alta utilização acumulada
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-label">Combustível</div>
+                <div class="metric-value warning">40%</div>
+
+                <div class="metric-description">
+                    Planejar abastecimento para o próximo turno
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar progress-fuel"></div>
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-label">Rotação do motor</div>
+                <div class="metric-value success">1.850 RPM</div>
+
+                <div class="metric-description">
+                    Rotação normal para escavação sob carga
+                </div>
+            </article>
+
+        </section>
+
+        <section class="content-grid">
+
+            <article class="panel">
+                <h2 class="panel-title">
+                    🧠 Resumo da Análise
+                </h2>
+
+                <div class="analysis-item alert">
+                    <strong>Temperatura do motor — Crítico/Alerta</strong>
+
+                    <p>
+                        A temperatura registrada é de 96°C, acima da faixa ideal
+                        de operação, estimada entre 80°C e 90°C. Existe risco de
+                        superaquecimento caso a temperatura continue aumentando.
+                    </p>
+                </div>
+
+                <div class="analysis-item warning">
+                    <strong>Horímetro — Alta utilização</strong>
+
+                    <p>
+                        O equipamento possui 8.420 horas de operação. Esse nível
+                        de utilização exige maior atenção à manutenção preventiva,
+                        incluindo radiador, bomba d'água, válvula termostática e
+                        sistema de arrefecimento.
+                    </p>
+                </div>
+
+                <div class="analysis-item warning">
+                    <strong>Combustível — Nível operacional</strong>
+
+                    <p>
+                        O nível de 40% permite a continuidade momentânea da
+                        operação, mas o reabastecimento deve ser planejado para
+                        evitar interrupções durante o próximo turno.
+                    </p>
+                </div>
+
+                <div class="analysis-item success">
+                    <strong>RPM — Operação normal</strong>
+
+                    <p>
+                        A rotação de 1.850 RPM está compatível com uma operação
+                        de escavação sob carga.
+                    </p>
+                </div>
+            </article>
+
+            <article class="panel">
+                <h2 class="panel-title">
+                    🔧 Recomendações Imediatas
+                </h2>
+
+                <div class="recommendation">
+                    <div class="recommendation-number">1</div>
+
+                    <div class="recommendation-content">
+                        <strong>Monitorar a temperatura</strong>
+
+                        <p>
+                            Caso a temperatura atinja entre 98°C e 100°C, siga o
+                            procedimento operacional e de segurança definido pelo
+                            fabricante e pela equipe responsável pela manutenção.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-number">2</div>
+
+                    <div class="recommendation-content">
+                        <strong>Realizar inspeção visual</strong>
+
+                        <p>
+                            Verificar o nível do fluido de arrefecimento e possíveis
+                            obstruções por poeira, palha ou resíduos na colmeia do
+                            radiador.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-number">3</div>
+
+                    <div class="recommendation-content">
+                        <strong>Planejar o abastecimento</strong>
+
+                        <p>
+                            Programar o reabastecimento antes do próximo turno para
+                            reduzir o risco de parada não planejada.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <footer class="ai-footer">
+            <div class="ai-status">
+                <span class="pulse"></span>
+                <span>Monitoramento por IA ativo</span>
+            </div>
+
+            <span>Ativo: EX01 | Ambiente de Mineração</span>
+        </footer>
+
+    </main>
+
+    <script>
+        /**
+         * Atualiza a data e a hora automaticamente.
+         */
+        function updateDateTime() {
+            const now = new Date();
+
+            const formattedDateTime = new Intl.DateTimeFormat("pt-BR", {
+                dateStyle: "full",
+                timeStyle: "medium"
+            }).format(now);
+
+            document.getElementById("currentDateTime").textContent =
+                formattedDateTime;
+        }
+
+        updateDateTime();
+
+        // Atualiza o horário a cada segundo.
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
